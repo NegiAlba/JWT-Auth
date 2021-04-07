@@ -1,9 +1,11 @@
 //! Executer npm init et mettre en place le package.json initial, installer nodemon via npm i --save-dev nodemon et changer le script de start en nodemon index.js
 //! Récupérer les dépendances : npm i express mongoose
 
-//? Dépendances de l'application : Express pour le serveur et Mongoose pour la connection avec MongoDB
+//? Dépendances de l'application : Express pour le serveur et Mongoose pour la connection avec MongoDB, Cors pour donner les droits d'accès au serveur
 const express = require('express');
 const mongoose = require('mongoose');
+const cors = require('cors');
+const cookieParser = require('cookie-parser');
 
 
 //? Ajout des liens des fichiers de routes
@@ -18,8 +20,14 @@ mongoose.connect('mongodb://localhost/jwt_auth',{
     console.log('Connected to MongoDB');
 });
 
+//? Instanciation de mon serveur & middlewares
 //TODO : Créer un fichier .env qui contient les variables d'environnement comme l'URL de connexion à la BDD, le port d'écoute par exemple.
 const app = express();
+app.use(cookieParser());
+app.use(cors({
+    credentials:true,
+    origin: ['http://localhost:8000', 'http://localhost:3000', 'http://localhost:4200']
+}))
 app.use(express.json());
 
 //? Routes
