@@ -1,29 +1,37 @@
-import React, { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect, useContext } from 'react'
+import { Link, Redirect } from 'react-router-dom';
+import { UserContext } from '../UserContext';
 
 
 
 const User = () => {
-
-    //? Ajout du state username pour l'affichage des boutons ou du username
-    const [username,setUsername] = useState('');
+    const { user, setUser } = useContext(UserContext);
+    
+    const [redirect,setRedirect] = useState(false);
 
     //? useEffect qui va récupérer l'utilisateur connecté
-    useEffect(()=>{
-        (
-            async () => {
-                const response = await fetch('http://localhost:8000/api/user', {
-                    headers: {'Content-Type': 'application/json'},
-                    credentials: 'include',
-                })
-
-                const content = await response.json();
-
-                setUsername(content.username);
-
-            }
-        )()
-    }, [])
+    // useEffect(()=>{
+    //     (
+    //         async () => {
+    //             if(!user){
+    //                 try {
+    //                     const response = await fetch('http://localhost:8000/api/user', {
+    //                         headers: {'Content-Type': 'application/json'},
+    //                         credentials: 'include',
+    //                     })
+        
+    //                     const content = await response.json();
+        
+    //                     if(content._id){
+    //                         setUser(content);
+    //                     }
+    //                 } catch (error) {
+    //                     console.log(`Printed error : ${error}`);
+    //                 }
+    //             }
+    //         }
+    //     )()
+    // }, [])
 
 
     //? Fonction logout qui va déconnecter l'utilisateur
@@ -34,13 +42,14 @@ const User = () => {
             credentials: 'include',
         });
 
-        setUsername('');
+        setUser(null);
+        setRedirect(true);
     }
 
     //? Création d'une variable qui va contenir un élément JSX variable : S'il y a un user alors c'est un bouton de déconnexion, autrement c'est un bouton de connexion
     let link;
 
-    if (!username){
+    if (!user){
         link = (
             <Link to="/login" className="btn btn-success">Login</Link>
         )
@@ -51,10 +60,14 @@ const User = () => {
     }
     //? Fin de la variable
 
-
+    if (redirect){
+        return <Redirect to="/"/>
+    }
+    
     return (
         <div>
-            {username ? `You are connected as ${username}` : `Log-in to discover new stuff`}
+            <h1>User page</h1>
+            {user ? `You are connected as ${user.username}` : `Log-in to discover new stuff`}
             {link}
         </div>
     )

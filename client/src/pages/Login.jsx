@@ -1,9 +1,12 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { Redirect } from 'react-router-dom'
+import { UserContext } from '../UserContext';
 
 
 
 const Login = () => {
+
+    const { user, setUser } = useContext(UserContext);
 
     const [email,setEmail] = useState("");
     const [password,setPassword] = useState("");
@@ -22,6 +25,17 @@ const Login = () => {
             })
         });
 
+        const response = await fetch('http://localhost:8000/api/user', {
+            headers: {'Content-Type': 'application/json'},
+            credentials: 'include',
+        })
+
+        const content = await response.json();
+
+        if(content._id){
+            setUser(content);
+        }
+
         setRedirect(true);
     }
 
@@ -29,6 +43,9 @@ const Login = () => {
         return <Redirect to="/user" />;
     }
 
+    if(user){
+        return <Redirect to="/" />;
+    }
     return (
         <form onSubmit={submit}>
             <h1 className="h3 mb-3 fw-normal">Please Register</h1>

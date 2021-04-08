@@ -1,8 +1,13 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { Redirect } from 'react-router-dom'
+import { UserContext } from '../UserContext';
 
 
 const Register = () => {
+
+    const { user, setUser } = useContext(UserContext);
+
+    
 
     const [username,setUsername] = useState("");
     const [email,setEmail] = useState("");
@@ -29,6 +34,11 @@ const Register = () => {
     if(redirect){
         return <Redirect to="/login" />;
     }
+
+    if(user){
+        return <Redirect to="/user" />;
+    }
+
 
     return (
         <form onSubmit={submit}>
