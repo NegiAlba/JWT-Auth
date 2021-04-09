@@ -1,4 +1,4 @@
-import React, {useEffect, useContext } from 'react'
+import React, { useContext } from 'react'
 import { Link } from 'react-router-dom';
 import { UserContext } from '../UserContext';
 
@@ -8,31 +8,6 @@ const User = () => {
 
     const {user, setUser} = useContext(UserContext);
     
-    const context = useContext(UserContext);
-    console.log(context);
-
-    
-
-    //? useEffect qui va récupérer l'utilisateur connecté
-    useEffect(()=>{
-        (
-            async () => {
-                const response = await fetch('http://localhost:8000/api/user', {
-                    headers: {'Content-Type': 'application/json'},
-                    credentials: 'include',
-                })
-
-                const content = await response.json();
-
-
-
-                // if(content._id){
-                //     setUser(content);
-                // }
-
-            }
-        )()
-    }, [])
 
 
     //? Fonction logout qui va déconnecter l'utilisateur

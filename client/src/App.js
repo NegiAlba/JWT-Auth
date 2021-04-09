@@ -1,12 +1,11 @@
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
-import logo from './logo.svg';
 import './App.css';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import User from './pages/User';
 import Home from './pages/Home';
 import Nav from './components/Nav';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { UserContext } from './UserContext';
 
 function App() {
@@ -14,6 +13,24 @@ function App() {
   const [user,setUser] = useState(null);
 
   const value = useMemo(()=> ({user,setUser}), [user,setUser]);
+
+  useEffect(()=>{
+    (
+        async () => {
+            const response = await fetch('http://localhost:8000/api/user', {
+                headers: {'Content-Type': 'application/json'},
+                credentials: 'include',
+            })
+
+            const content = await response.json();
+
+            if(content._id){
+                setUser(content);
+            }
+
+        }
+    )()
+  }, [])
 
 
   return (
