@@ -6,11 +6,20 @@ import Register from './pages/Register';
 import User from './pages/User';
 import Home from './pages/Home';
 import Nav from './components/Nav';
+import { useMemo, useState } from 'react';
+import { UserContext } from './UserContext';
 
 function App() {
+
+  const [user,setUser] = useState(null);
+
+  const value = useMemo(()=> ({user,setUser}), [user,setUser]);
+
+
   return (
     <div className="App">
         <BrowserRouter>
+        <UserContext.Provider value={value}>
           <Nav/>
           <main className="form-signin">
             <Switch>
@@ -20,6 +29,7 @@ function App() {
               <Route path="/user" component={User}/>
             </Switch>
           </main>
+        </UserContext.Provider>
         </BrowserRouter>
     </div>
   );

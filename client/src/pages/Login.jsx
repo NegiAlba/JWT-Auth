@@ -1,9 +1,11 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { Redirect } from 'react-router-dom'
+import { UserContext } from '../UserContext';
 
 
 
 const Login = () => {
+    const {user} = useContext(UserContext);
 
     const [email,setEmail] = useState("");
     const [password,setPassword] = useState("");
@@ -25,6 +27,9 @@ const Login = () => {
         setRedirect(true);
     }
 
+    if(user){
+        return <Redirect to="/" />;
+    }
     if(redirect){
         return <Redirect to="/user" />;
     }
